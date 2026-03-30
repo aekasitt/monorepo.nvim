@@ -51,8 +51,7 @@ describe('Detect, read, parse and then autodetect & parse Cargo.toml in director
 
   it('should autodetect and parse parse Cargo.toml file from file directory', function()
     local cwd = vim.fn.getcwd()
-    local cargo_toml = cwd .. '/Cargo.toml'
-    local members = utilities.parse_cargo_workspace(cargo_toml)
+    local members = utilities.get_workspace_members()
     assert.are.same(members, {
       {
         name = 'crate1',

@@ -51,8 +51,7 @@ describe('Detect, read, parse and then autodetect & parse pyproject.toml in dire
 
   it('should autodetect and parse parse pyproject.toml file from test directory', function()
     local cwd = vim.fn.getcwd()
-    local pyproject_toml = cwd .. '/pyproject.toml'
-    local members = utilities.parse_pyproject_uv_workspace(pyproject_toml)
+    local members = utilities.get_workspace_members()
     assert.are.same(members, {
       {
         name = 'package1',

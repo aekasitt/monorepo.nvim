@@ -51,8 +51,7 @@ describe('Detect, read, parse and then autodetect & parse package.json in direct
 
   it('should autodetect and parse parse package.json file from file directory', function()
     local cwd = vim.fn.getcwd()
-    local package_json = cwd .. '/package.json'
-    local members = utilities.parse_package_json_workspace(package_json)
+    local members = utilities.get_workspace_members()
     assert.are.same(members, {
       {
         name = 'package1',
