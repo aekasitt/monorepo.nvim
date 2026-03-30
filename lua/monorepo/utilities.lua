@@ -160,7 +160,7 @@ M.get_workspace_members = function()
   if monorepo_type == 'cargo' then
     return M.parse_cargo_workspace(path)
   elseif monorepo_type == 'javascript' then
-    return M.parse_package_json(path)
+    return M.parse_package_json_workspace(path)
   elseif monorepo_type == 'python' then
     return M.parse_pyproject_uv_workspace(path)
   end
