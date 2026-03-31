@@ -9,7 +9,7 @@
 
 ![Monorepo banner](static/monorepo-banner.svg)
 
-## Features
+### Features
 
 - Toggle dropdown window showing workspace members
   * Compatible with [Rust](https://rust-lang.org) by investigating `Cargo.toml` file
@@ -25,7 +25,14 @@
 - Open members in [fff](https://github.com/dmtrKovalenko/fff.nvim) fuzzy file finder
 - Customizable keybindings and window appearance
 
-## Installation
+### Prerequisites
+
+- Works well with a monorepo with one of:
+  - `Cargo.toml` with `[workspace]` attribute and `members` array
+  - `package.json` with `"workspaces"` array
+  - `pyproject.toml` with `[tool.uv.workspaces]` attribute and `members` array
+
+### Installation
 
 1. Using [lazy.nvim](https://github.com/folke/lazy.nvim): 
     <details>
@@ -104,14 +111,18 @@
       ```
     </details>
 
-## Configuration
+### Commands
 
-Default configuration:
+- `:Monorepo` - Toggle the workspace members dropdown
+
+### Configurations
+
+Defaults:
 
 ```lua
 require('monorepo').setup({
   fff_integration = true,  -- Use fff.nvim to open crates
-  keybinding = '<leader>mr',
+  keybinding = '<leader>mn',
   window = {
     border = 'rounded',  -- 'none', 'single', 'double', 'rounded', 'solid', 'shadow'
     height = 15,
@@ -120,28 +131,26 @@ require('monorepo').setup({
 })
 ```
 
-## Usage
-
-### Commands
-
-- `:Monorepo` - Toggle the workspace crates dropdown
-
-### Default Keybindings
+#### Default Keybindings
 
 In the dropdown window:
 - `<Space>` - Toggle crate visibility
 - `<CR>` - Open crate in fff
 - `q` or `<Esc>` - Close the dropdown
 
-## Requirements
+### Requirements
 
 - Neovim >= 0.8.0
-- A monorepo with one of:
-  - `Cargo.toml` with `[workspace]` and `members`
-  - `package.json` with `"workspaces"` array
-  - `pyproject.toml` with `[tool.uv.workspaces]` and `members`
 - (Optional) [fff.nvim](https://github.com/dmtrKovalenko/fff.nvim) for fuzzy file finder integration
 - (Optional) [nvim-web-devicons](https://github.com/nvim-tree/nvim-web-devicons) for better icons
+
+### Acknowledgements
+
+1. [ปริศนา - Prisna](https://www.f0nt.com/release/sov-prisna)
+  typeface by [uvSOV - Worawut Thanawatanawanich](https://fb.com/worawut.thanawatanawanich)
+2. [fff](https://github.com/dmtrKovalenko/fff.nvim) - The fastest and the most accurate file search
+  toolkit for AI agents, Neovim, Rust, C, and NodeJS 
+3. [Dmitriy Kovalenko](https://dmtrkovalenko.dev) - Your unFriendly Software Engineer
 
 ## License
 
