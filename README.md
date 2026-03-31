@@ -5,6 +5,7 @@
 [![Languages](https://img.shields.io/github/languages/count/aekasitt/monorepo.nvim)](https://github.com/aekasitt/monorepo.nvim)
 [![Size](https://img.shields.io/github/repo-size/aekasitt/monorepo.nvim)](https://github.com/aekasitt/monorepo.nvim)
 [![Last commit](https://img.shields.io/github/last-commit/aekasitt/monorepo.nvim/master)](https://github.com/aekasitt/monorepo.nvim)
+[![Fork](https://img.shields.io/badge/fork-aekasitt/fargo.nvim-beige?logo=github)](https://github.com/aekasitt/fargo.nvim)
 
 ![Monorepo banner](static/monorepo-banner.svg)
 
