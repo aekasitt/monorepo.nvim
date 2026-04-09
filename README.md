@@ -47,21 +47,19 @@
       ```lua
       {
         'aekasitt/monorepo.nvim',
-        config = function()
-          require('monorepo').setup({
-            keybinding = '<leader>mn',
-            window = {
-              border = 'rounded',
-              height = 15,
-              width = 60,
-            },
-            fff_integration = true,
-          })
-        end,
         dependencies = {
           'dmtrKovalenko/fff.nvim',  -- (optional) for quick access
           'nvim-tree/nvim-web-devicons',  -- (optional) for better icons
         },
+        opts = {
+          fff_integration = true,
+          keybinding = '<leader>mn',
+          window = {
+            border = 'rounded',
+            height = 15,
+            width = 60,
+          },
+        }
       }
       ```
     </details>
@@ -73,17 +71,15 @@
       ```lua
       use {
         'aekasitt/monorepo.nvim',
-        config = function()
-          require('monorepo').setup({
-            keybinding = '<leader>mn',
-            window = {
-              border = 'rounded',
-              height = 15,
-              width = 60,
-            },
-            fff_integration = true,
-          })
-        end,
+        opts = {
+          fff_integration = true,
+          keybinding = '<leader>mn',
+          window = {
+            border = 'rounded',
+            height = 15,
+            width = 60,
+          },
+        },
         require = {
           'dmtrKovalenko/fff.nvim',  -- (optional) for quick access
           'nvim-tree/nvim-web-devicons',  -- (optional) for better icons

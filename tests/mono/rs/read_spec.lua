@@ -11,7 +11,7 @@ describe('Detect, read, parse and then autodetect & parse Cargo.toml in director
   end)
 
   before_each(function()
-    vim.api.nvim_set_current_dir(root_dir .. '/tests/cargo')
+    vim.api.nvim_set_current_dir(root_dir .. '/tests/mono/rs')
   end)
 
   it('should detect Cargo.toml file from test directory', function()

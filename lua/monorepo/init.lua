@@ -21,7 +21,7 @@ local function normalize_mode(mode)
   return 'mono'
 end
 
-function M.setup(opts)
+function M.setup(_, opts)
   opts = opts or {}
   opts.mode = normalize_mode(opts.mode)
   statemgmt.set_config(opts)

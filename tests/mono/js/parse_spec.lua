@@ -32,7 +32,7 @@ describe('Parser with package.json containing empty workspaces array', function(
   end)
 
   before_each(function()
-    vim.api.nvim_set_current_dir(root_dir .. '/tests/javascript')
+    vim.api.nvim_set_current_dir(root_dir .. '/tests/mono/js')
   end)
 
   it('should parse a file containing empty workspaces', function()
@@ -58,7 +58,7 @@ describe('Parser with package.json containing workspaces array format', function
   end)
 
   before_each(function()
-    vim.api.nvim_set_current_dir(root_dir .. '/tests/javascript')
+    vim.api.nvim_set_current_dir(root_dir .. '/tests/mono/js')
   end)
 
   it('should parse a file with workspaces as array', function()
@@ -84,7 +84,7 @@ describe('Parser with package.json containing workspaces object format', functio
   end)
 
   before_each(function()
-    vim.api.nvim_set_current_dir(root_dir .. '/tests/javascript')
+    vim.api.nvim_set_current_dir(root_dir .. '/tests/mono/js')
   end)
 
   it('should parse a file with workspaces as object with packages key', function()
@@ -113,7 +113,7 @@ describe('Parser with package.json containing direct paths in workspaces', funct
   end)
 
   before_each(function()
-    vim.api.nvim_set_current_dir(root_dir .. '/tests/javascript')
+    vim.api.nvim_set_current_dir(root_dir .. '/tests/mono/js')
   end)
 
   it('should parse a file with direct workspace paths', function()

@@ -1,9 +1,9 @@
--- ~~/tests/javascript/read_package_json_spec.lua --
+-- ~~/tests/cargo/read_pyproject_toml_spec.lua --
 
 -- imports --
 local utilities = require('monorepo.utilities')
 
-describe('Detect, read, parse and then autodetect & parse package.json in directory', function()
+describe('Detect, read, parse and then autodetect & parse pyproject.toml in directory', function()
   local root_dir = vim.fn.getcwd()
 
   after_each(function()
@@ -11,25 +11,25 @@ describe('Detect, read, parse and then autodetect & parse package.json in direct
   end)
 
   before_each(function()
-    vim.api.nvim_set_current_dir(root_dir .. '/tests/javascript')
+    vim.api.nvim_set_current_dir(root_dir .. '/tests/mono/py')
   end)
 
-  it('should detect package.json file from test directory', function()
-    local package_json = vim.fn.getcwd() .. '/package.json'
-    local file_detected = vim.fn.filereadable(package_json)
+  it('should detect pyproject.toml file from test directory', function()
+    local pyproject_toml = vim.fn.getcwd() .. '/pyproject.toml'
+    local file_detected = vim.fn.filereadable(pyproject_toml)
     assert.are.same(file_detected, 1)
   end)
 
-  it('should read package.json file from test directory', function()
-    local package_json = vim.fn.getcwd() .. '/package.json'
-    local content = table.concat(vim.fn.readfile(package_json), '\n')
+  it('should read pyproject.toml file from test directory', function()
+    local pyproject_toml = vim.fn.getcwd() .. '/pyproject.toml'
+    local content = table.concat(vim.fn.readfile(pyproject_toml), '\n')
     assert.is_not_nil(content)
   end)
 
-  it('should parse package.json file from test directory', function()
+  it('should parse pyproject.toml file from test directory', function()
     local cwd = vim.fn.getcwd()
-    local package_json = cwd .. '/package.json'
-    local members = utilities.parse_package_json_workspace(package_json)
+    local pyproject_toml = cwd .. '/pyproject.toml'
+    local members = utilities.parse_pyproject_uv_workspace(pyproject_toml)
     assert.are.same(members, {
       {
         name = 'package1',
@@ -49,7 +49,7 @@ describe('Detect, read, parse and then autodetect & parse package.json in direct
     })
   end)
 
-  it('should autodetect and parse parse package.json file from file directory', function()
+  it('should autodetect and parse parse pyproject.toml file from test directory', function()
     local cwd = vim.fn.getcwd()
     local members = utilities.get_workspace_members()
     assert.are.same(members, {

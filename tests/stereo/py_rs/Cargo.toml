@@ -1,0 +1,10 @@
+[package]
+edition = '2024'
+name = 'stereo-fixture'
+private = true
+
+[workspace]
+members = [
+  'crate_rs',
+  'shared',
+]

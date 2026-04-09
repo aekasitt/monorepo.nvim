@@ -1,0 +1,9 @@
+[project]
+name = 'stereo-fixture'
+private = true
+
+[tool.uv.workspace]
+members = [
+  'package_py',
+  'shared',
+]
