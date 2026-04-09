@@ -5,6 +5,15 @@ local utilities = require('monorepo.utilities')
 
 local M = {}
 
+function M.close()
+  local state = statemgmt.get_state()
+  if state.win and vim.api.nvim_win_is_valid(state.win) then
+    vim.api.nvim_win_close(state.win, true)
+  end
+  state.win = nil
+  state.buf = nil
+end
+
 function M.create_window()
   local config = statemgmt.get_config()
   local state = statemgmt.get_state()
@@ -86,51 +95,13 @@ function M.create_window()
   end
 end
 
-function M.render_members()
-  local config = statemgmt.get_config()
-  local state = statemgmt.get_state()
-
-  if not state.buf or not vim.api.nvim_buf_is_valid(state.buf) then
-    return
+function M.get_lang_icon(devicons, ext)
+  if not ext then
+    return '', nil
   end
-  state.members = utilities.get_workspace_members()
-
-  -- Check if nvim-web-devicons is available
-  local has_devicons, devicons = pcall(require, 'nvim-web-devicons')
-  local eye_icon = has_devicons and '  ' or '[✓]' -- nf-fa-eye
-  local eye_slash_icon = has_devicons and '  ' or '[ ]' -- nf-fa-eye_slash
-
-  local lines = {}
-  table.insert(lines, '')
-  table.insert(lines, ' Space: toggle visibility  |  Enter: open in fff  |  q/Esc: close')
-  table.insert(lines, '')
-  table.insert(lines, string.rep('─', config.window.width - 2))
-  table.insert(lines, '')
-  for i, member in ipairs(state.members) do
-    local icon = member.visible and eye_icon or eye_slash_icon
-    local line = string.format(' %s %s', icon, member.name)
-    table.insert(lines, line)
-  end
-
-  vim.api.nvim_buf_set_option(state.buf, 'modifiable', true)
-  vim.api.nvim_buf_set_lines(state.buf, 0, -1, false, lines)
-  vim.api.nvim_buf_set_option(state.buf, 'modifiable', false)
-end
-
-function M.toggle_member()
-  local state = statemgmt.get_state()
-  local line = vim.api.nvim_win_get_cursor(state.win)[1]
-  local member_index = line - 5 -- Account for header lines (3 header + 1 separator + 1 blank = 5)
-
-  if member_index > 0 and member_index <= #state.members then
-    state.members[member_index].visible = not state.members[member_index].visible
-
-    -- Update .ignore file to reflect visibility changes
-    utilities.update_ignore_file(state.members)
-
-    M.render_members()
-    vim.api.nvim_win_set_cursor(state.win, { line, 0 })
-  end
+  local filename = 'icon.' .. ext
+  local icon, hl = devicons.get_icon(filename, ext, { default = true })
+  return icon or '', hl
 end
 
 function M.open_in_fff()
@@ -142,11 +113,9 @@ function M.open_in_fff()
   if member_index > 0 and member_index <= #state.members then
     local member = state.members[member_index]
     M.close()
-
     if config.fff_integration then
       local fff_ok, fff = pcall(require, 'fff')
       if fff_ok and fff.find_files then
-        -- Open fff in the member directory
         vim.cmd('cd ' .. member.path)
         fff.find_files()
       else
@@ -156,6 +125,44 @@ function M.open_in_fff()
       vim.cmd('edit ' .. member.path)
     end
   end
+end
+
+function M.render_members()
+  local config = statemgmt.get_config()
+  local state = statemgmt.get_state()
+  if not state.buf or not vim.api.nvim_buf_is_valid(state.buf) then
+    return
+  end
+  local lines = {}
+  table.insert(lines, '')
+  table.insert(lines, ' Space: toggle visibility  |  Enter: open in fff  |  q/Esc: close')
+  table.insert(lines, '')
+  table.insert(lines, string.rep('─', config.window.width))
+  table.insert(lines, '')
+
+  state.members = utilities.get_workspace_members()
+  -- Check if nvim-web-devicons is available
+  local has_devicons, devicons = pcall(require, 'nvim-web-devicons')
+  local eye_icon = has_devicons and '  ' or '[✓]' -- nf-fa-eye
+  local eye_slash_icon = has_devicons and '  ' or '[ ]' -- nf-fa-eye_slash
+  for _, member in ipairs(state.members) do
+    local checkbox = member.visible and eye_icon or eye_slash_icon
+    local left
+    if has_devicons then
+      local lang_icon = M.get_lang_icon(devicons, member.type) -- NOTE: ignore hl
+      left = string.format('  %s  %s', lang_icon, member.name)
+    else
+      left = string.format('  %s', member.name)
+    end
+    local pad = math.max(
+      1,
+      (config.window.width - 2) - vim.fn.strdisplaywidth(left) - vim.fn.strdisplaywidth(checkbox)
+    )
+    table.insert(lines, left .. string.rep(' ', pad) .. checkbox)
+  end
+  vim.api.nvim_buf_set_option(state.buf, 'modifiable', true)
+  vim.api.nvim_buf_set_lines(state.buf, 0, -1, false, lines)
+  vim.api.nvim_buf_set_option(state.buf, 'modifiable', false)
 end
 
 function M.setup_keymaps()
@@ -216,17 +223,13 @@ function M.setup_keymaps()
       if not state.win or not vim.api.nvim_win_is_valid(state.win) then
         return
       end
-
       local line = vim.api.nvim_win_get_cursor(state.win)[1]
       local first_line = 6
       local last_line = 5 + #state.members
-
-      -- Ensure we don't try to set cursor beyond buffer bounds
       local buf_line_count = vim.api.nvim_buf_line_count(state.buf)
       if last_line > buf_line_count then
         last_line = buf_line_count
       end
-
       if line < first_line and first_line <= buf_line_count then
         vim.api.nvim_win_set_cursor(state.win, { first_line, 0 })
       elseif line > last_line and last_line > 0 then
@@ -236,13 +239,16 @@ function M.setup_keymaps()
   })
 end
 
-function M.close()
+function M.toggle_member()
   local state = statemgmt.get_state()
-  if state.win and vim.api.nvim_win_is_valid(state.win) then
-    vim.api.nvim_win_close(state.win, true)
+  local line = vim.api.nvim_win_get_cursor(state.win)[1]
+  local member_index = line - 5 -- Account for header lines (3 header + 1 separator + 1 blank = 5)
+  if member_index > 0 and member_index <= #state.members then
+    state.members[member_index].visible = not state.members[member_index].visible
+    utilities.update_ignore_file(state.members)
+    M.render_members()
+    vim.api.nvim_win_set_cursor(state.win, { line, 0 })
   end
-  state.win = nil
-  state.buf = nil
 end
 
 return M
