@@ -1,4 +1,4 @@
--- ~~/tests/cargo/read_cargo_toml_spec.lua --
+-- ~~/tests/mono/rs/read_spec.lua --
 
 -- imports --
 local dirhelper = require('tests.mono.dirhelper')
@@ -35,16 +35,19 @@ describe('Detect, read, parse and then autodetect & parse Cargo.toml in director
       {
         name = 'crate1',
         path = cwd .. '/crate1',
+        type = 'rs',
         visible = true,
       },
       {
         name = 'crate2',
         path = cwd .. '/crate2',
+        type = 'rs',
         visible = true,
       },
       {
         name = 'crate3',
         path = cwd .. '/crate3',
+        type = 'rs',
         visible = true,
       },
     })
@@ -57,16 +60,19 @@ describe('Detect, read, parse and then autodetect & parse Cargo.toml in director
       {
         name = 'crate1',
         path = cwd .. '/crate1',
+        type = 'rs',
         visible = true,
       },
       {
         name = 'crate2',
         path = cwd .. '/crate2',
+        type = 'rs',
         visible = true,
       },
       {
         name = 'crate3',
         path = cwd .. '/crate3',
+        type = 'rs',
         visible = true,
       },
     })

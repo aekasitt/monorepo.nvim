@@ -1,6 +1,4 @@
--- ~~/tests/mono/helpers.lua --
-
-local statemgmt = require('monorepo.statemgmt')
+-- ~~/tests/mono/dirhelper.lua --
 
 local M = {}
 M.root_dir = vim.fn.getcwd()

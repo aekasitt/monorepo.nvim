@@ -103,7 +103,7 @@ M.extract_cargo_workspace = function(content)
 end
 
 -- Extract all quoted strings from the members array (both single and double quotes)
-M.extract_members = function(content)
+M.extract_members = function(content, member_type)
   local cwd = vim.fn.getcwd()
   local members = {}
   local members_content = content:match('members%s*=%s*%[(.-)%]')
@@ -113,6 +113,7 @@ M.extract_members = function(content)
       table.insert(members, {
         name = member_name,
         path = cwd .. '/' .. member_name,
+        type = member_type,
         visible = not hidden[member_name],
       })
     end
@@ -134,7 +135,7 @@ M.parse_cargo_workspace = function(path)
   local content = table.concat(vim.fn.readfile(path), '\n')
   local workspace_section = M.extract_cargo_workspace(content)
   if workspace_section then
-    return M.extract_members(workspace_section) or {}
+    return M.extract_members(workspace_section, 'rs') or {}
   end
   return {}
 end
@@ -151,7 +152,7 @@ M.extract_package_json_workspaces = function(content)
 end
 
 -- Parse workspace patterns from npm workspaces array string
-M.extract_package_json_members = function(section)
+M.extract_package_json_members = function(section, member_type)
   local cwd = vim.fn.getcwd()
   local hidden = M.get_hidden_members_from_ignore()
   local members = {}
@@ -168,6 +169,7 @@ M.extract_package_json_members = function(section)
             table.insert(members, {
               name = base_path .. '/' .. item_name,
               path = item,
+              type = member_type,
               visible = not hidden[base_path .. '/' .. item_name],
             })
           end
@@ -179,6 +181,7 @@ M.extract_package_json_members = function(section)
         table.insert(members, {
           name = pattern,
           path = full_path,
+          type = member_type,
           visible = not hidden[pattern],
         })
       end
@@ -187,11 +190,11 @@ M.extract_package_json_members = function(section)
   return members
 end
 
-M.parse_package_json_workspace = function(path)
+M.parse_package_json_workspace = function(path, monorepo_type)
   local content = table.concat(vim.fn.readfile(path), '\n')
   local workspaces_section = M.extract_package_json_workspaces(content)
   if workspaces_section then
-    local members = M.extract_package_json_members(workspaces_section)
+    local members = M.extract_package_json_members(workspaces_section, monorepo_type)
     return members
   end
   return {}
@@ -202,14 +205,14 @@ M.parse_pyproject_uv_workspace = function(path)
   local content = table.concat(vim.fn.readfile(path), '\n')
   local workspace_section = M.extract_pyproject_uv_workspace(content)
   if workspace_section then
-    return M.extract_members(workspace_section) or {}
+    return M.extract_members(workspace_section, 'py') or {}
   end
   return {}
 end
 
 M.parse_workspace_members = function(monorepo_type, path)
   if monorepo_type == 'js' or monorepo_type == 'ts' then
-    return M.parse_package_json_workspace(path)
+    return M.parse_package_json_workspace(path, monorepo_type)
   elseif monorepo_type == 'py' then
     return M.parse_pyproject_uv_workspace(path)
   elseif monorepo_type == 'rs' then

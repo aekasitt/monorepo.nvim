@@ -37,11 +37,13 @@ describe('Mono/stereo behavior for Python + Cargo manifests', function()
       {
         name = 'package_py',
         path = cwd .. '/package_py',
+        type = 'py',
         visible = true,
       },
       {
         name = 'shared',
         path = cwd .. '/shared',
+        type = 'py',
         visible = true,
       },
     }, members)
@@ -55,16 +57,19 @@ describe('Mono/stereo behavior for Python + Cargo manifests', function()
       {
         name = 'package_py',
         path = cwd .. '/package_py',
+        type = 'py',
         visible = true,
       },
       {
         name = 'shared',
         path = cwd .. '/shared',
+        type = 'py',
         visible = true,
       },
       {
         name = 'crate_rs',
         path = cwd .. '/crate_rs',
+        type = 'rs',
         visible = true,
       },
     }, members)

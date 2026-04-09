@@ -1,4 +1,4 @@
--- ~~/tests/parse_pyproject_toml_spec.lua --
+-- ~~/tests/mono/py/parse_spec.lua --
 
 -- imports --
 local utilities = require('monorepo.utilities')
@@ -35,7 +35,7 @@ version = "0.1.0"
 ]]
     local workspace_section = utilities.extract_pyproject_uv_workspace(pyproject_toml)
     assert.is_not_nil(workspace_section)
-    local members = utilities.extract_members(workspace_section)
+    local members = utilities.extract_members(workspace_section) -- NOTE: member_type optional
     assert.is_nil(members)
   end)
 end)
@@ -52,7 +52,7 @@ members = []
 ]]
     local workspace_section = utilities.extract_pyproject_uv_workspace(pyproject_toml)
     assert.is_not_nil(workspace_section)
-    local members = utilities.extract_members(workspace_section)
+    local members = utilities.extract_members(workspace_section) -- NOTE: member_type optional
     assert.is_nil(members)
   end)
 end)
@@ -73,7 +73,7 @@ members = [
 ]]
     local workspace_section = utilities.extract_pyproject_uv_workspace(pyproject_toml)
     assert.is_not_nil(workspace_section)
-    local members = utilities.extract_members(workspace_section)
+    local members = utilities.extract_members(workspace_section) -- NOTE: member_type optional
     assert.is_not_nil(members)
     local cwd = vim.fn.getcwd() -- NOTE: displays members from root
     assert.are.same(members, {

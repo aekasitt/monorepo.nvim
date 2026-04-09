@@ -1,4 +1,4 @@
--- ~~/tests/cargo/read_pyproject_toml_spec.lua --
+-- ~~/tests/mono/py/read_spec.lua --
 
 -- imports --
 local dirhelper = require('tests.mono.dirhelper')
@@ -35,16 +35,19 @@ describe('Detect, read, parse and then autodetect & parse pyproject.toml in dire
       {
         name = 'package1',
         path = cwd .. '/package1',
+        type = 'py',
         visible = true,
       },
       {
         name = 'package2',
         path = cwd .. '/package2',
+        type = 'py',
         visible = true,
       },
       {
         name = 'package3',
         path = cwd .. '/package3',
+        type = 'py',
         visible = true,
       },
     })
@@ -57,16 +60,19 @@ describe('Detect, read, parse and then autodetect & parse pyproject.toml in dire
       {
         name = 'package1',
         path = cwd .. '/package1',
+        type = 'py',
         visible = true,
       },
       {
         name = 'package2',
         path = cwd .. '/package2',
+        type = 'py',
         visible = true,
       },
       {
         name = 'package3',
         path = cwd .. '/package3',
+        type = 'py',
         visible = true,
       },
     })

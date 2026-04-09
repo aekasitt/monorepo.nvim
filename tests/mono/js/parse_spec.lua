@@ -46,7 +46,7 @@ describe('Parser with package.json containing empty workspaces array', function(
 ]]
     local workspaces = utilities.extract_package_json_workspaces(test_package_json)
     assert.is_not_nil(workspaces)
-    local members = utilities.extract_package_json_members(workspaces)
+    local members = utilities.extract_package_json_members(workspaces) -- NOTE: member_type is optional
     assert.are.same({}, members)
   end)
 end)
@@ -73,7 +73,7 @@ describe('Parser with package.json containing workspaces array format', function
     local cwd = vim.fn.getcwd()
     local workspaces = utilities.extract_package_json_workspaces(test_package_json)
     assert.is_not_nil(workspaces)
-    local members = utilities.extract_package_json_members(workspaces)
+    local members = utilities.extract_package_json_members(workspaces) -- NOTE: member_type optional
     assert.are.same({}, members) -- FIXME: glob pattern should detect "package1" and "package2"
   end)
 end)
@@ -101,7 +101,7 @@ describe('Parser with package.json containing workspaces object format', functio
     local cwd = vim.fn.getcwd()
     local workspaces = utilities.extract_package_json_workspaces(test_package_json)
     assert.is_not_nil(workspaces)
-    local members = utilities.extract_package_json_members(workspaces)
+    local members = utilities.extract_package_json_members(workspaces) -- NOTE: member_type optional
     assert.are.same({}, members) -- FIXME: should be able to detect inner "packages" field as array
   end)
 end)
@@ -131,7 +131,7 @@ describe('Parser with package.json containing direct paths in workspaces', funct
     local cwd = vim.fn.getcwd()
     local workspaces = utilities.extract_package_json_workspaces(test_package_json)
     assert.is_not_nil(workspaces)
-    local members = utilities.extract_package_json_members(workspaces)
+    local members = utilities.extract_package_json_members(workspaces) -- NOTE: member_type optional
     assert.are.same({
       {
         name = 'package1',

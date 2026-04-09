@@ -1,4 +1,4 @@
--- ~~/tests/javascript/read_package_json_spec.lua --
+-- ~~/tests/mono/js/read_spec.lua --
 
 -- imports --
 local dirhelper = require('tests.mono.dirhelper')
@@ -30,21 +30,24 @@ describe('Detect, read, parse and then autodetect & parse package.json in direct
   it('should parse package.json file from test directory', function()
     local cwd = vim.fn.getcwd()
     local package_json = cwd .. '/package.json'
-    local members = utilities.parse_package_json_workspace(package_json)
+    local members = utilities.parse_package_json_workspace(package_json, 'js')
     assert.are.same(members, {
       {
         name = 'package1',
         path = cwd .. '/package1',
+        type = 'js',
         visible = true,
       },
       {
         name = 'package2',
         path = cwd .. '/package2',
+        type = 'js',
         visible = true,
       },
       {
         name = 'package3',
         path = cwd .. '/package3',
+        type = 'js',
         visible = true,
       },
     })
@@ -57,16 +60,19 @@ describe('Detect, read, parse and then autodetect & parse package.json in direct
       {
         name = 'package1',
         path = cwd .. '/package1',
+        type = 'js',
         visible = true,
       },
       {
         name = 'package2',
         path = cwd .. '/package2',
+        type = 'js',
         visible = true,
       },
       {
         name = 'package3',
         path = cwd .. '/package3',
+        type = 'js',
         visible = true,
       },
     })
