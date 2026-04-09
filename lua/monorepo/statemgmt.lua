@@ -4,7 +4,7 @@ local M = {}
 
 M.config = {
   fff_integration = true,
-  keybinding = '<leader>fg',
+  keybinding = '<leader>mn',
   window = {
     border = 'rounded',
     height = 15,
