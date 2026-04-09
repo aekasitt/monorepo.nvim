@@ -10,8 +10,8 @@ function M.create_window()
   local state = statemgmt.get_state()
 
   -- Check if in a supported monorepo
-  local monorepo_type = utilities.detect_monorepo_type()
-  if not monorepo_type then
+  local manifests = utilities.detect_monorepo_manifests()
+  if #manifests == 0 then
     vim.notify(
       'No monorepo detected: Cargo.toml, package.json or pyproject.toml not found',
       vim.log.levels.WARN
@@ -22,8 +22,17 @@ function M.create_window()
   -- Check if workspace has members
   local members = utilities.get_workspace_members()
   if #members == 0 then
-    local type_name = monorepo_type == 'cargo' and 'Cargo.toml' or 'package.json workspaces'
-    vim.notify('No workspace members found in ' .. type_name, vim.log.levels.WARN)
+    if config.mode == 'stereo' then
+      local manifest_names = utilities.get_detected_manifest_names()
+      vim.notify(
+        'No workspace members found across detected manifests: '
+          .. table.concat(manifest_names, ', '),
+        vim.log.levels.WARN
+      )
+    else
+      local type_name = utilities.get_manifest_name(manifests[1].type) or manifests[1].type
+      vim.notify('No workspace members found in ' .. type_name, vim.log.levels.WARN)
+    end
     return
   end
 

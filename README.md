@@ -21,16 +21,22 @@
     project on [Node](https://bun.com) runtime by investigating `package.json` file
   * Compatible with [Python](https://www.python.org) project managed by
     [uv](https://docs.astral.sh/uv) package and project manager by investigating `pyproject.toml` file
+- Select manifest detection mode:
+  * `mono`: use the first detected manifest at repository root
+  * `stereo`: combine members from all supported manifests at repository root
 - Toggle visibility of individual workspace members using `<Space>` keypress
 - Open members in [fff](https://github.com/dmtrKovalenko/fff.nvim) fuzzy file finder
 - Customizable keybindings and window appearance
 
 ### Prerequisites
 
-- Works well with a monorepo with one of:
+- Works well with a monorepo with at least one of:
   - `Cargo.toml` with `[workspace]` attribute and `members` array
   - `package.json` with `"workspaces"` array
-  - `pyproject.toml` with `[tool.uv.workspaces]` attribute and `members` array
+  - `pyproject.toml` with `[tool.uv.workspace]` attribute and `members` array
+- Detection behavior:
+  - `mono` mode: first-match priority is `Cargo.toml` -> `package.json` -> `pyproject.toml`
+  - `stereo` mode: parse all detected manifests and merge members into one list (deduped by absolute path)
 
 ### Installation
 
@@ -123,6 +129,7 @@ Defaults:
 require('monorepo').setup({
   fff_integration = true,  -- Use fff.nvim to open crates
   keybinding = '<leader>mn',
+  mode = 'mono', -- 'mono' (default) or 'stereo'
   window = {
     border = 'rounded',  -- 'none', 'single', 'double', 'rounded', 'solid', 'shadow'
     height = 15,
@@ -130,6 +137,10 @@ require('monorepo').setup({
   },
 })
 ```
+
+Mode options:
+- `mono` (default): detect one manifest at repository root using priority `Cargo.toml` -> `package.json` -> `pyproject.toml`
+- `stereo`: detect every supported manifest at repository root and show a unified member list
 
 #### Default Keybindings
 

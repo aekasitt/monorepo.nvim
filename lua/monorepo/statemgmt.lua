@@ -5,6 +5,7 @@ local M = {}
 M.config = {
   fff_integration = true,
   keybinding = '<leader>mn',
+  mode = 'mono',
   window = {
     border = 'rounded',
     height = 15,

@@ -5,11 +5,27 @@ local statemgmt = require('monorepo.statemgmt')
 local utilities = require('monorepo.utilities')
 
 local M = {}
+local VALID_MODES = { mono = true, stereo = true }
+
+local function normalize_mode(mode)
+  if mode == nil then
+    return nil
+  end
+  if VALID_MODES[mode] then
+    return mode
+  end
+  vim.notify(
+    string.format('Invalid monorepo mode "%s". Falling back to "mono".', tostring(mode)),
+    vim.log.levels.WARN
+  )
+  return 'mono'
+end
 
 function M.setup(opts)
+  opts = opts or {}
+  opts.mode = normalize_mode(opts.mode)
   statemgmt.set_config(opts)
   local config = statemgmt.get_config()
-
   if config.keybinding then
     vim.keymap.set('n', config.keybinding, function()
       M.toggle()

@@ -1,6 +1,28 @@
 -- ~~/lua/monorepo/utilities.lua --
 
+local statemgmt = require('monorepo.statemgmt')
 local M = {}
+
+local MANIFEST_PRIORITY = {
+  {
+    type = 'cargo',
+    filename = 'Cargo.toml',
+  },
+  {
+    type = 'javascript',
+    filename = 'package.json',
+  },
+  {
+    type = 'python',
+    filename = 'pyproject.toml',
+  },
+}
+
+local MANIFEST_NAMES = {
+  cargo = 'Cargo.toml',
+  javascript = 'package.json',
+  python = 'pyproject.toml',
+}
 
 function M.get_hidden_members_from_ignore()
   local cwd = vim.fn.getcwd()
@@ -22,18 +44,30 @@ function M.get_hidden_members_from_ignore()
 end
 
 function M.detect_monorepo_type()
-  local cwd = vim.fn.getcwd()
-  local cargo_toml = cwd .. '/Cargo.toml'
-  local package_json = cwd .. '/package.json'
-  local pyproject_toml = cwd .. '/pyproject.toml'
-  if vim.fn.filereadable(cargo_toml) == 1 then
-    return 'cargo', cargo_toml
-  elseif vim.fn.filereadable(package_json) == 1 then
-    return 'javascript', package_json
-  elseif vim.fn.filereadable(pyproject_toml) == 1 then
-    return 'python', pyproject_toml
+  local manifests = M.detect_monorepo_manifests()
+  if #manifests ~= 0 then
+    return manifests[1].type, manifests[1].path
   end
   return nil, nil
+end
+
+function M.detect_monorepo_manifests()
+  local cwd = vim.fn.getcwd()
+  local manifests = {}
+  for _, manifest in ipairs(MANIFEST_PRIORITY) do
+    local path = cwd .. '/' .. manifest.filename
+    if vim.fn.filereadable(path) == 1 then
+      table.insert(manifests, {
+        type = manifest.type,
+        path = path,
+      })
+    end
+  end
+  return manifests
+end
+
+function M.get_manifest_name(monorepo_type)
+  return MANIFEST_NAMES[monorepo_type]
 end
 
 -- Find [workspace] section (stop at next TOML section like [package] or [dependencies])
@@ -77,7 +111,7 @@ M.parse_cargo_workspace = function(path)
   local content = table.concat(vim.fn.readfile(path), '\n')
   local workspace_section = M.extract_cargo_workspace(content)
   if workspace_section then
-    return M.extract_members(workspace_section)
+    return M.extract_members(workspace_section) or {}
   end
   return {}
 end
@@ -142,21 +176,15 @@ end
 
 -- Find [tool.uv.workspace] section (stop at next TOML section)
 M.parse_pyproject_uv_workspace = function(path)
-  local members = {}
-  local cwd = vim.fn.getcwd()
   local content = table.concat(vim.fn.readfile(path), '\n')
   local workspace_section = M.extract_pyproject_uv_workspace(content)
   if workspace_section then
-    return M.extract_members(workspace_section)
+    return M.extract_members(workspace_section) or {}
   end
   return {}
 end
 
-M.get_workspace_members = function()
-  local monorepo_type, path = M.detect_monorepo_type()
-  if not monorepo_type then
-    return {}
-  end
+M.parse_workspace_members = function(monorepo_type, path)
   if monorepo_type == 'cargo' then
     return M.parse_cargo_workspace(path)
   elseif monorepo_type == 'javascript' then
@@ -165,6 +193,42 @@ M.get_workspace_members = function()
     return M.parse_pyproject_uv_workspace(path)
   end
   return {}
+end
+
+M.get_detected_manifest_names = function()
+  local names = {}
+  for _, manifest in ipairs(M.detect_monorepo_manifests()) do
+    table.insert(names, M.get_manifest_name(manifest.type) or manifest.type)
+  end
+  return names
+end
+
+M.get_workspace_members = function()
+  local config = statemgmt.get_config()
+  local mode = config.mode == 'stereo' and 'stereo' or 'mono'
+  local manifests = M.detect_monorepo_manifests()
+
+  if #manifests == 0 then
+    return {}
+  end
+
+  if mode == 'mono' then
+    local manifest = manifests[1]
+    return M.parse_workspace_members(manifest.type, manifest.path)
+  end
+
+  local members = {}
+  local seen_paths = {}
+  for _, manifest in ipairs(manifests) do
+    local parsed_members = M.parse_workspace_members(manifest.type, manifest.path)
+    for _, member in ipairs(parsed_members) do
+      if not seen_paths[member.path] then
+        seen_paths[member.path] = true
+        table.insert(members, member)
+      end
+    end
+  end
+  return members
 end
 
 M.update_ignore_file = function(members)
