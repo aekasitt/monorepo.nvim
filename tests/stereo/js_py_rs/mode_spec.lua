@@ -19,16 +19,16 @@ describe('Mono/stereo behavior for JS + Python + Cargo manifests', function()
     local manifests = utilities.detect_monorepo_manifests()
     assert.are.same({
       {
-        type = 'cargo',
-        path = cwd .. '/Cargo.toml',
-      },
-      {
-        type = 'javascript',
         path = cwd .. '/package.json',
+        type = 'js',
       },
       {
-        type = 'python',
         path = cwd .. '/pyproject.toml',
+        type = 'py',
+      },
+      {
+        path = cwd .. '/Cargo.toml',
+        type = 'rs',
       },
     }, manifests)
   end)
@@ -39,8 +39,8 @@ describe('Mono/stereo behavior for JS + Python + Cargo manifests', function()
     local members = utilities.get_workspace_members()
     assert.are.same({
       {
-        name = 'crate_rs',
-        path = cwd .. '/crate_rs',
+        name = 'package_js',
+        path = cwd .. '/package_js',
         visible = true,
       },
       {
@@ -57,8 +57,8 @@ describe('Mono/stereo behavior for JS + Python + Cargo manifests', function()
     local members = utilities.get_workspace_members()
     assert.are.same({
       {
-        name = 'crate_rs',
-        path = cwd .. '/crate_rs',
+        name = 'package_js',
+        path = cwd .. '/package_js',
         visible = true,
       },
       {
@@ -67,13 +67,13 @@ describe('Mono/stereo behavior for JS + Python + Cargo manifests', function()
         visible = true,
       },
       {
-        name = 'package_js',
-        path = cwd .. '/package_js',
+        name = 'package_py',
+        path = cwd .. '/package_py',
         visible = true,
       },
       {
-        name = 'package_py',
-        path = cwd .. '/package_py',
+        name = 'crate_rs',
+        path = cwd .. '/crate_rs',
         visible = true,
       },
     }, members)

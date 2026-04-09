@@ -19,12 +19,12 @@ describe('Mono/stereo behavior for Python + Cargo manifests', function()
     local manifests = utilities.detect_monorepo_manifests()
     assert.are.same({
       {
-        type = 'cargo',
-        path = cwd .. '/Cargo.toml',
+        path = cwd .. '/pyproject.toml',
+        type = 'py',
       },
       {
-        type = 'python',
-        path = cwd .. '/pyproject.toml',
+        path = cwd .. '/Cargo.toml',
+        type = 'rs',
       },
     }, manifests)
   end)
@@ -35,8 +35,8 @@ describe('Mono/stereo behavior for Python + Cargo manifests', function()
     local members = utilities.get_workspace_members()
     assert.are.same({
       {
-        name = 'crate_rs',
-        path = cwd .. '/crate_rs',
+        name = 'package_py',
+        path = cwd .. '/package_py',
         visible = true,
       },
       {
@@ -53,8 +53,8 @@ describe('Mono/stereo behavior for Python + Cargo manifests', function()
     local members = utilities.get_workspace_members()
     assert.are.same({
       {
-        name = 'crate_rs',
-        path = cwd .. '/crate_rs',
+        name = 'package_py',
+        path = cwd .. '/package_py',
         visible = true,
       },
       {
@@ -63,8 +63,8 @@ describe('Mono/stereo behavior for Python + Cargo manifests', function()
         visible = true,
       },
       {
-        name = 'package_py',
-        path = cwd .. '/package_py',
+        name = 'crate_rs',
+        path = cwd .. '/crate_rs',
         visible = true,
       },
     }, members)

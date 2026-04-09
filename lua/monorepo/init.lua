@@ -21,8 +21,11 @@ local function normalize_mode(mode)
   return 'mono'
 end
 
-function M.setup(_, opts)
-  opts = opts or {}
+function M.setup(opts, legacy_opts)
+  opts = (type(opts) == 'table') and opts or {}
+  if type(legacy_opts) == 'table' then
+    opts = vim.tbl_deep_extend('force', vim.deepcopy(opts), legacy_opts)
+  end
   opts.mode = normalize_mode(opts.mode)
   statemgmt.set_config(opts)
   local config = statemgmt.get_config()

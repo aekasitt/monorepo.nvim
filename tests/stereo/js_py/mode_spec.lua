@@ -19,12 +19,12 @@ describe('Mono/stereo behavior for JS + Python manifests', function()
     local manifests = utilities.detect_monorepo_manifests()
     assert.are.same({
       {
-        type = 'javascript',
         path = cwd .. '/package.json',
+        type = 'js',
       },
       {
-        type = 'python',
         path = cwd .. '/pyproject.toml',
+        type = 'py',
       },
     }, manifests)
   end)

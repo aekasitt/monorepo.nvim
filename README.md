@@ -12,15 +12,21 @@
 ### Features
 
 - Toggle dropdown window showing workspace members
-  * Compatible with [Rust](https://rust-lang.org) by investigating `Cargo.toml` file
   * Compatible with [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-    project on [Bun](https://bun.com) runtime by investigating `package.json` file
+    or [TypeScript](https://www.typescriptlang.org/) project
+    on [Bun](https://bun.com) runtime by investigating `package.json` file
+    (recognized as **TypeScript** if `tsconfig.json` present)
   * Compatible with [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-    project on [Deno](https://deno.com) runtime by investigating `package.json` file
+    or [TypeScript](https://www.typescriptlang.org/) project
+    on [Deno](https://deno.com) runtime by investigating `package.json` file
+    (recognized as **TypeScript** if `tsconfig.json` present)
   * Compatible with [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-    project on [Node](https://bun.com) runtime by investigating `package.json` file
+    or [TypeScript](https://www.typescriptlang.org/) project
+    on [Node](https://bun.com) runtime by investigating `package.json` file
+    (recognized as **TypeScript** if `tsconfig.json` present)
   * Compatible with [Python](https://www.python.org) project managed by
     [uv](https://docs.astral.sh/uv) package and project manager by investigating `pyproject.toml` file
+  * Compatible with [Rust](https://rust-lang.org) by investigating `Cargo.toml` file
 - Select manifest detection mode:
   * `mono`: use the first detected manifest at repository root
   * `stereo`: combine members from all supported manifests at repository root
@@ -35,7 +41,8 @@
   - `package.json` with `"workspaces"` array
   - `pyproject.toml` with `[tool.uv.workspace]` attribute and `members` array
 - Detection behavior:
-  - `mono` mode: first-match priority is `Cargo.toml` -> `package.json` -> `pyproject.toml`
+  - `mono` mode: first-match priority is:
+    `package.json + tsconfig.json` -> `package.json` -> `pyproject.toml` -> `Cargo.toml`
   - `stereo` mode: parse all detected manifests and merge members into one list (deduped by absolute path)
 
 ### Installation
@@ -51,7 +58,7 @@
         'https://github.com/dmtrKovalenko/fff.nvim',  -- (optional) for quick access
         'https://github.com/nvim-tree/nvim-web-devicons', -- (optional) for better icons
       })
-      require('monorepo').setup('elmono', {  -- follows Lazy convention; puts opts second
+      require('monorepo').setup({
         fff_integration = true,
         keybinding = '<leader>mn',
         window = {
@@ -94,9 +101,9 @@
       ```toml
       [[plugins]]
       lua_after = """
-      require('monorepo').setup('elmono', {  -- follows Lazy convention; puts opts second
+      require('monorepo').setup({
         fff_integration = true,
-        keybinding = '<leader>mr',
+        keybinding = '<leader>mn',
         window = {
           border = 'rounded',
           height = 15,
@@ -106,8 +113,8 @@
       """
       repo = 'aekasitt/monorepo.nvim'
       with = [
-        'dmtrKovalenko/fff.nvim',  -- (optional) for quick access
-        'nvim-tree/nvim-web-devicons',  -- (optional) for better icons
+        'dmtrKovalenko/fff.nvim',  # (optional) for quick access
+        'nvim-tree/nvim-web-devicons',  # (optional) for better icons
       ]
       ```
     </details>

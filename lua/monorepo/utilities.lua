@@ -5,23 +5,30 @@ local M = {}
 
 local MANIFEST_PRIORITY = {
   {
-    type = 'cargo',
-    filename = 'Cargo.toml',
-  },
-  {
-    type = 'javascript',
     filename = 'package.json',
+    forbidden = { 'tsconfig.json' },
+    type = 'js',
   },
   {
-    type = 'python',
     filename = 'pyproject.toml',
+    type = 'py',
+  },
+  {
+    filename = 'package.json',
+    required = { 'tsconfig.json' },
+    type = 'ts',
+  },
+  {
+    filename = 'Cargo.toml',
+    type = 'rs',
   },
 }
 
 local MANIFEST_NAMES = {
-  cargo = 'Cargo.toml',
-  javascript = 'package.json',
-  python = 'pyproject.toml',
+  js = 'package.json',
+  py = 'pyproject.toml',
+  rs = 'Cargo.toml',
+  ts = 'package.json + tsconfig.json',
 }
 
 function M.get_hidden_members_from_ignore()
@@ -57,10 +64,26 @@ function M.detect_monorepo_manifests()
   for _, manifest in ipairs(MANIFEST_PRIORITY) do
     local path = cwd .. '/' .. manifest.filename
     if vim.fn.filereadable(path) == 1 then
-      table.insert(manifests, {
-        type = manifest.type,
-        path = path,
-      })
+      local found_forbidden = false
+      for _, forbidden_file in ipairs(manifest.forbidden or {}) do
+        if vim.fn.filereadable(cwd .. '/' .. forbidden_file) == 1 then
+          found_forbidden = true
+        end
+      end
+      if not found_forbidden then
+        local missing_required = false
+        for _, required_file in ipairs(manifest.required or {}) do
+          if vim.fn.filereadable(cwd .. '/' .. required_file) ~= 1 then
+            missing_required = true
+          end
+        end
+        if not missing_required then
+          table.insert(manifests, {
+            path = path,
+            type = manifest.type,
+          })
+        end
+      end
     end
   end
   return manifests
@@ -185,12 +208,12 @@ M.parse_pyproject_uv_workspace = function(path)
 end
 
 M.parse_workspace_members = function(monorepo_type, path)
-  if monorepo_type == 'cargo' then
-    return M.parse_cargo_workspace(path)
-  elseif monorepo_type == 'javascript' then
+  if monorepo_type == 'js' or monorepo_type == 'ts' then
     return M.parse_package_json_workspace(path)
-  elseif monorepo_type == 'python' then
+  elseif monorepo_type == 'py' then
     return M.parse_pyproject_uv_workspace(path)
+  elseif monorepo_type == 'rs' then
+    return M.parse_cargo_workspace(path)
   end
   return {}
 end

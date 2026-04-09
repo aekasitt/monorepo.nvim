@@ -19,12 +19,12 @@ describe('Mono/stereo behavior for JS + Cargo manifests', function()
     local manifests = utilities.detect_monorepo_manifests()
     assert.are.same({
       {
-        type = 'cargo',
-        path = cwd .. '/Cargo.toml',
+        path = cwd .. '/package.json',
+        type = 'js',
       },
       {
-        type = 'javascript',
-        path = cwd .. '/package.json',
+        path = cwd .. '/Cargo.toml',
+        type = 'rs',
       },
     }, manifests)
   end)
@@ -35,8 +35,8 @@ describe('Mono/stereo behavior for JS + Cargo manifests', function()
     local members = utilities.get_workspace_members()
     assert.are.same({
       {
-        name = 'crate_rs',
-        path = cwd .. '/crate_rs',
+        name = 'package_js',
+        path = cwd .. '/package_js',
         visible = true,
       },
       {
@@ -53,8 +53,8 @@ describe('Mono/stereo behavior for JS + Cargo manifests', function()
     local members = utilities.get_workspace_members()
     assert.are.same({
       {
-        name = 'crate_rs',
-        path = cwd .. '/crate_rs',
+        name = 'package_js',
+        path = cwd .. '/package_js',
         visible = true,
       },
       {
@@ -63,8 +63,8 @@ describe('Mono/stereo behavior for JS + Cargo manifests', function()
         visible = true,
       },
       {
-        name = 'package_js',
-        path = cwd .. '/package_js',
+        name = 'crate_rs',
+        path = cwd .. '/crate_rs',
         visible = true,
       },
     }, members)
