@@ -1,17 +1,18 @@
 -- ~~/tests/cargo/read_pyproject_toml_spec.lua --
 
 -- imports --
+local dirhelper = require('tests.mono.dirhelper')
 local utilities = require('monorepo.utilities')
 
 describe('Detect, read, parse and then autodetect & parse pyproject.toml in directory', function()
   local root_dir = vim.fn.getcwd()
 
   after_each(function()
-    vim.api.nvim_set_current_dir(root_dir)
+    dirhelper.leave_fixture()
   end)
 
   before_each(function()
-    vim.api.nvim_set_current_dir(root_dir .. '/tests/mono/py')
+    dirhelper.enter_fixture('py')
   end)
 
   it('should detect pyproject.toml file from test directory', function()

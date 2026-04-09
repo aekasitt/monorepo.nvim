@@ -1,5 +1,6 @@
--- ~~/tests/stereo/test_helpers.lua --
+-- ~~/tests/stereo/dirhelper.lua --
 
+-- imports --
 local statemgmt = require('monorepo.statemgmt')
 
 local M = {}

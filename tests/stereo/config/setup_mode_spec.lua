@@ -3,15 +3,15 @@
 -- imports --
 local monorepo = require('monorepo')
 local statemgmt = require('monorepo.statemgmt')
-local helpers = require('tests.stereo.test_helpers')
+local dirhelper = require('tests.stereo.dirhelper')
 
 describe('Mono/stereo setup mode configuration', function()
   before_each(function()
-    helpers.enter_fixture('js_py_rs')
+    dirhelper.enter_fixture('js_py_rs')
   end)
 
   after_each(function()
-    helpers.leave_fixture()
+    dirhelper.leave_fixture()
   end)
 
   it('should default to mono mode in config', function()

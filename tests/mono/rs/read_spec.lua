@@ -1,17 +1,18 @@
 -- ~~/tests/cargo/read_cargo_toml_spec.lua --
 
 -- imports --
+local dirhelper = require('tests.mono.dirhelper')
 local utilities = require('monorepo.utilities')
 
 describe('Detect, read, parse and then autodetect & parse Cargo.toml in directory', function()
   local root_dir = vim.fn.getcwd()
 
   after_each(function()
-    vim.api.nvim_set_current_dir(root_dir)
+    dirhelper.leave_fixture()
   end)
 
   before_each(function()
-    vim.api.nvim_set_current_dir(root_dir .. '/tests/mono/rs')
+    dirhelper.enter_fixture('rs')
   end)
 
   it('should detect Cargo.toml file from test directory', function()

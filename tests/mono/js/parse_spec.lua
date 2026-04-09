@@ -1,6 +1,7 @@
 -- ~~/tests/parse_package_json_spec.lua --
 
 -- imports --
+local dirhelper = require('tests.mono.dirhelper')
 local utilities = require('monorepo.utilities')
 
 describe('Parser with empty package.json', function()

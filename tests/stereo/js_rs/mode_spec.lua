@@ -1,17 +1,17 @@
 -- ~~/tests/stereo/js_rs/mode_spec.lua --
 
 -- imports --
+local dirhelper = require('tests.stereo.dirhelper')
 local statemgmt = require('monorepo.statemgmt')
 local utilities = require('monorepo.utilities')
-local helpers = require('tests.stereo.test_helpers')
 
 describe('Mono/stereo behavior for JS + Cargo manifests', function()
   before_each(function()
-    helpers.enter_fixture('js_rs')
+    dirhelper.enter_fixture('js_rs')
   end)
 
   after_each(function()
-    helpers.leave_fixture()
+    dirhelper.leave_fixture()
   end)
 
   it('should detect cargo then javascript manifests in stable order', function()

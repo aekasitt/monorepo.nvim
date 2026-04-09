@@ -1,17 +1,17 @@
 -- ~~/tests/stereo/js_py/mode_spec.lua --
 
 -- imports --
+local dirhelper = require('tests.stereo.dirhelper')
 local statemgmt = require('monorepo.statemgmt')
 local utilities = require('monorepo.utilities')
-local helpers = require('tests.stereo.test_helpers')
 
 describe('Mono/stereo behavior for JS + Python manifests', function()
   before_each(function()
-    helpers.enter_fixture('js_py')
+    dirhelper.enter_fixture('js_py')
   end)
 
   after_each(function()
-    helpers.leave_fixture()
+    dirhelper.leave_fixture()
   end)
 
   it('should detect javascript then python manifests in stable order', function()
