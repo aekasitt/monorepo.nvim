@@ -40,7 +40,30 @@
 
 ### Installation
 
-1. Using [lazy.nvim](https://github.com/folke/lazy.nvim): 
+1. Using [built-in](https://echasnovski.com/blog/2025-07-04-neovim-now-has-builtin-plugin-manager.html)
+  for [neovim 0.12+](https://github.com/neovim/neovim/pull/34009):
+    <details>
+      <summary> Specify configuration file: `~/.config/nvim/lua/init.lua` </summary>
+    
+      ```lua
+      vim.pack.add({
+        'https://github.com/aekasitt/monorepo.nvim',
+        'https://github.com/dmtrKovalenko/fff.nvim',  -- (optional) for quick access
+        'https://github.com/nvim-tree/nvim-web-devicons', -- (optional) for better icons
+      })
+      require('monorepo').setup('elmono', {  -- follows Lazy convention; puts opts second
+        fff_integration = true,
+        keybinding = '<leader>mn',
+        window = {
+          border = 'rounded',
+          height = 15,
+          width = 60,
+        },
+      })
+      ```
+    </details>
+
+2. Using [lazy.nvim](https://github.com/folke/lazy.nvim): 
     <details>
       <summary> Specify configuration file: `~/.config/nvim/lua/init.lua` </summary>
     
@@ -64,30 +87,6 @@
       ```
     </details>
 
-2. Using [packer.nvim](https://github.com/wbthomason/packer.nvim): 
-    <details>
-      <summary> Specify configuration file: `~/.config/nvim/lua/plugins.lua` </summary>
-    
-      ```lua
-      use {
-        'aekasitt/monorepo.nvim',
-        opts = {
-          fff_integration = true,
-          keybinding = '<leader>mn',
-          window = {
-            border = 'rounded',
-            height = 15,
-            width = 60,
-          },
-        },
-        require = {
-          'dmtrKovalenko/fff.nvim',  -- (optional) for quick access
-          'nvim-tree/nvim-web-devicons',  -- (optional) for better icons
-        },
-      }
-      ```
-    </details>
-
 3. Using [rsplug.nvim](https://github.com/gw31415/rsplug.nvim) : 
     <details>
       <summary> Specify configuration file `~/.config/nvim/rsplug.toml` </summary>
@@ -95,7 +94,7 @@
       ```toml
       [[plugins]]
       lua_after = """
-      require('monorepo').setup({
+      require('monorepo').setup('elmono', {  -- follows Lazy convention; puts opts second
         fff_integration = true,
         keybinding = '<leader>mr',
         window = {
