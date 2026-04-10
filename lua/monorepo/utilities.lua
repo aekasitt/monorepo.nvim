@@ -31,7 +31,11 @@ local MANIFEST_NAMES = {
   ts = 'package.json + tsconfig.json',
 }
 
-function M.get_hidden_members_from_ignore()
+M.anchor_member_to_root = function(line)
+  return (line or ''):gsub('^/+', '')
+end
+
+M.get_hidden_members_from_ignore = function()
   local cwd = vim.fn.getcwd()
   local ignore_file = cwd .. '/.ignore'
   local hidden = {}
@@ -43,22 +47,15 @@ function M.get_hidden_members_from_ignore()
       elseif line == '# monorepo-nvim: end' then
         in_monorepo_section = false
       elseif in_monorepo_section and line ~= '' then
-        hidden[line] = true
+        local anchored = M.anchor_member_to_root(line)
+        hidden[anchored] = true
       end
     end
   end
   return hidden
 end
 
-function M.detect_monorepo_type()
-  local manifests = M.detect_monorepo_manifests()
-  if #manifests ~= 0 then
-    return manifests[1].type, manifests[1].path
-  end
-  return nil, nil
-end
-
-function M.detect_monorepo_manifests()
+M.detect_monorepo_manifests = function()
   local cwd = vim.fn.getcwd()
   local manifests = {}
   for _, manifest in ipairs(MANIFEST_PRIORITY) do
@@ -89,7 +86,15 @@ function M.detect_monorepo_manifests()
   return manifests
 end
 
-function M.get_manifest_name(monorepo_type)
+M.detect_monorepo_type = function()
+  local manifests = M.detect_monorepo_manifests()
+  if #manifests ~= 0 then
+    return manifests[1].type, manifests[1].path
+  end
+  return nil, nil
+end
+
+M.get_manifest_name = function(monorepo_type)
   return MANIFEST_NAMES[monorepo_type]
 end
 
@@ -296,7 +301,8 @@ M.update_ignore_file = function(members)
   if #hidden_members > 0 then
     table.insert(new_lines, monorepo_begin_marker)
     for _, member_name in ipairs(hidden_members) do
-      table.insert(new_lines, member_name)
+      local anchored = M.anchor_member_to_root(member_name)
+      table.insert(new_lines, '/' .. anchored)
     end
     table.insert(new_lines, monorepo_end_marker)
   end
