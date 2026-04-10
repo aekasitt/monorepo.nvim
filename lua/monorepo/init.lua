@@ -7,7 +7,18 @@ local utilities = require('monorepo.utilities')
 local M = {}
 local VALID_MODES = { mono = true, stereo = true }
 
-local function normalize_mode(mode)
+function M.get_visible_members()
+  local state = statemgmt.get_state()
+  local visible = {}
+  for _, member in ipairs(state.members) do
+    if member.visible then
+      table.insert(visible, member)
+    end
+  end
+  return visible
+end
+
+function M.normalize_mode(mode)
   if mode == nil then
     return nil
   end
@@ -26,7 +37,7 @@ function M.setup(opts, legacy_opts)
   if type(legacy_opts) == 'table' then
     opts = vim.tbl_deep_extend('force', vim.deepcopy(opts), legacy_opts)
   end
-  opts.mode = normalize_mode(opts.mode)
+  opts.mode = M.normalize_mode(opts.mode)
   statemgmt.set_config(opts)
   local config = statemgmt.get_config()
   if config.keybinding then
@@ -43,17 +54,6 @@ function M.toggle()
   else
     interface.create_window()
   end
-end
-
-function M.get_visible_members()
-  local state = statemgmt.get_state()
-  local visible = {}
-  for _, member in ipairs(state.members) do
-    if member.visible then
-      table.insert(visible, member)
-    end
-  end
-  return visible
 end
 
 return M
