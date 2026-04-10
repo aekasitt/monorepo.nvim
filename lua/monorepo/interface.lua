@@ -4,6 +4,8 @@ local statemgmt = require('monorepo.statemgmt')
 local utilities = require('monorepo.utilities')
 
 local M = {}
+local ICON_HL_NS = vim.api.nvim_create_namespace('monorepo.lang_icons')
+vim.api.nvim_set_hl(0, 'MonorepoHiddenEye', { link = 'Comment' })
 
 function M.close()
   local state = statemgmt.get_state()
@@ -145,12 +147,21 @@ function M.render_members()
   local has_devicons, devicons = pcall(require, 'nvim-web-devicons')
   local eye_icon = has_devicons and '  ' or '[✓]' -- nf-fa-eye
   local eye_slash_icon = has_devicons and '  ' or '[ ]' -- nf-fa-eye_slash
+  local icon_hls = {}
   for _, member in ipairs(state.members) do
     local checkbox = member.visible and eye_icon or eye_slash_icon
     local left
     if has_devicons then
-      local lang_icon = M.get_lang_icon(devicons, member.type) -- NOTE: ignore hl
+      local lang_icon, lang_hl = M.get_lang_icon(devicons, member.type)
       left = string.format('  %s  %s', lang_icon, member.name)
+      if lang_hl and lang_hl ~= '' and lang_icon ~= '' then
+        table.insert(icon_hls, {
+          line = #lines,
+          hl = lang_hl,
+          start_col = 2,
+          end_col = 2 + #lang_icon,
+        })
+      end
     else
       left = string.format('  %s', member.name)
     end
@@ -158,10 +169,30 @@ function M.render_members()
       1,
       (config.window.width - 2) - vim.fn.strdisplaywidth(left) - vim.fn.strdisplaywidth(checkbox)
     )
-    table.insert(lines, left .. string.rep(' ', pad) .. checkbox)
+    local line = left .. string.rep(' ', pad) .. checkbox
+    table.insert(lines, line)
+    if not member.visible then
+      table.insert(icon_hls, {
+        line = #lines - 1,
+        hl = 'MonorepoHiddenEye',
+        start_col = #line - #checkbox,
+        end_col = #line,
+      })
+    end
   end
   vim.api.nvim_buf_set_option(state.buf, 'modifiable', true)
   vim.api.nvim_buf_set_lines(state.buf, 0, -1, false, lines)
+  vim.api.nvim_buf_clear_namespace(state.buf, ICON_HL_NS, 0, -1)
+  for _, item in ipairs(icon_hls) do
+    vim.api.nvim_buf_add_highlight(
+      state.buf,
+      ICON_HL_NS,
+      item.hl,
+      item.line,
+      item.start_col,
+      item.end_col
+    )
+  end
   vim.api.nvim_buf_set_option(state.buf, 'modifiable', false)
 end
 
