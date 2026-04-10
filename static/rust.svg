@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg
+  aria-label='Rust'
+  height='16px'
+  viewBox='0 0 512 512'
+  width='16px'
+  xml:space='default'
+  xmlns='http://www.w3.org/2000/svg'
+  xmlns:xlink='http://www.w3.org/1999/xlink'
+  xmlns:svgjs='http://svgjs.dev/svgjs'
+  >
+  <rect
+    fill='white'
+    width='512'
+    height='512'
+    rx='15%'
+  />
+  <g transform='translate(256 256)'>
+    <g id='d'>
+      <g id='c'>
+        <g id='b'>
+          <path
+            id='a'
+            d='
+              M20-183 6-206
+              c-3-5-9-5-12 0
+              l-14 23
+              m0 366 14 23
+              c3 5 9 5 12 0
+              l14-23
+            '
+          />
+          <use
+            transform='rotate(11.25)'
+            xlink:href='#a'
+          />
+        </g>
+        <use
+          transform='rotate(22.5)'
+          xlink:href='#b' 
+        />
+      </g>
+      <use
+        transform='rotate(45)'
+        xlink:href='#c'
+      />
+    </g>
+    <use
+      transform='rotate(90)'
+      xlink:href='#d'
+    />
+    <g id='f'>
+      <path id='e'
+        d='
+          M-101-161
+          a190 190 0 00-76 230
+          l32-16
+          a154 154 0 01-8-73
+          l25-13
+          c6-3 9-9 5-15
+          l-11-26
+          a155 155 0 0159-61
+          m-88 82
+          c5-16 29-7 24 8
+          s-29 8-24-8
+        '
+      />
+      <use
+        transform='rotate(72)'
+        xlink:href='#e' 
+      />
+    </g>
+    <use
+      transform='rotate(144)'
+      xlink:href='#f'
+    />
+    <use
+      transform='rotate(-72)'
+      xlink:href='#e' 
+    />
+    <path
+      d='
+        M135 10
+        s4 32-18 32-6-24-43-51
+        c0 0 31-13 31-47
+        s-40-48-57-48
+        h-187
+        v46
+        h35
+        v99
+        h-52
+        v49
+        h160
+        v-48
+        h-39
+        v-28
+        h40
+        c41 0 13 76 60 76
+        h99
+        v-80
+        m-199-38
+        v-30
+        h54
+        c22 0 23 30 0 30
+      '
+    />
+  </g>
+</svg>

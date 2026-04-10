@@ -12,21 +12,16 @@
 ### Features
 
 - Toggle dropdown window showing workspace members
-  * Compatible with [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-    or [TypeScript](https://www.typescriptlang.org/) project
-    on [Bun](https://bun.com) runtime by investigating `package.json` file
-    (recognized as **TypeScript** if `tsconfig.json` present)
-  * Compatible with [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-    or [TypeScript](https://www.typescriptlang.org/) project
-    on [Deno](https://deno.com) runtime by investigating `package.json` file
-    (recognized as **TypeScript** if `tsconfig.json` present)
-  * Compatible with [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-    or [TypeScript](https://www.typescriptlang.org/) project
-    on [Node](https://bun.com) runtime by investigating `package.json` file
-    (recognized as **TypeScript** if `tsconfig.json` present)
-  * Compatible with [Python](https://www.python.org) project managed by
+  * Compatible with [JavaScript ![JS](static/javascript.svg)&nbsp;](https://www.w3schools.com/js/)
+    or [TypeScript ![TS](static/typescript.svg)&nbsp;](https://www.typescriptlang.org/) project
+    on [Bun](https://bun.com),
+    [Deno](https://deno.com),
+    or [Node](https://bun.com) runtime
+    by investigating `package.json` file (prioritizes **TypeScript** if `tsconfig.json` present)
+  * Compatible with [Python ![PY](static/python.svg)&nbsp;](https://www.python.org) project managed by
     [uv](https://docs.astral.sh/uv) package and project manager by investigating `pyproject.toml` file
-  * Compatible with [Rust](https://rust-lang.org) by investigating `Cargo.toml` file
+  * Compatible with [Rust ![RS](static/rust.svg)&nbsp;](https://rust-lang.org)
+    by investigating `Cargo.toml` file
 - Select manifest detection mode:
   * `mono`: use the first detected manifest at repository root
   * `stereo`: combine members from all supported manifests at repository root
@@ -164,6 +159,8 @@ In the dropdown window:
 2. [fff](https://github.com/dmtrKovalenko/fff.nvim) - The fastest and the most accurate file search
   toolkit for AI agents, Neovim, Rust, C, and NodeJS 
 3. [Dmitriy Kovalenko](https://dmtrkovalenko.dev) - Your unFriendly Software Engineer
+4. Language icons from [Tiny App Icons Collections](https://www.svgrepo.com/collection/tiny-app-icons/)
+  by [SVG Repo](www.svgrepo.com)
 
 ## License
 

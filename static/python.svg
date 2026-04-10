@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg
+  aria-label='Python'
+  height='16px'
+  viewBox='0 0 512 512'
+  width='16px'
+  xml:space='default'
+  xmlns='http://www.w3.org/2000/svg'
+  xmlns:xlink='http://www.w3.org/1999/xlink'
+  xmlns:svgjs='http://svgjs.dev/svgjs'
+  >
+  <rect
+    fill='white'
+    height='512'
+    width='512'
+    rx='15%'
+  />
+  <g 
+    fill='#5a9fd4'
+    >
+    <path id='snek'
+      d='
+        M254 64
+        c-16 0-31 1-44 4-39 7-46 21-46 47
+        v35
+        h92
+        v12
+        H130
+        c-27 0-50 16-58 46-8 35-8 57 0 93 7 28 23 47 49 47
+        h32
+        v-42
+        c0-30 26-57 57-57
+        h91
+        c26 0 46-21 46-46
+        v-88
+        c0-24-21-43-46-47-15-3-32-4-47-4z
+        m-50 28
+        c10 0 17 8 17 18 0 9-7 17-17 17-9 0-17-8-17-17 0-10 8-18 17-18z
+      '
+    />
+  </g>
+  <use
+    fill='#ffd43b'
+    xlink:href='#snek'
+    transform='rotate(180,256,255)'
+  />
+</svg>
